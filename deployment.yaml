@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nodejs-app
+spec:
+  selector:
+    matchLabels:
+      app: nodejs-app
+  template:
+    metadata:
+      labels:
+        app: nodejs-app
+    spec:
+      containers:
+      - name: microservice1
+        image: ms1:v1.0
+        ports:
+        - containerPort: 3000
+      - name: microservice2
+        image: ms2:v1.0
+        ports:
+        - containerPort: 3001
+      - name: microservice3
+        image: ms3:v1.0
+        ports:
+        - containerPort: 3002
+      - name: microservice4
+        image: ms4:v1.0
+        ports:
+        - containerPort: 3003
+  replicas: 4
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: nodejs-app-service
+spec:
+  selector:
+    app: nodejs-app
+  ports:
+    - protocol: TCP
+      port: 2000
+      targetPort: 3000
+  type: LoadBalancer
